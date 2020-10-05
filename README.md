@@ -12,7 +12,7 @@ Objective of this project is to classify the datasets which include some images 
   - **1 : automobile**
   - **2 : bird**
   - **3 : car**
-  - **4： deer**
+  - **4 : deer**
   - **5 : dog**
   - **6 : frog**
   - **7 : horse**
@@ -24,4 +24,17 @@ Objective of this project is to classify the datasets which include some images 
 
 1. **Model Structure and Layers**
 
-![](img/model.png)
+<p align='center'>
+  <img src='img/model.png'>  
+</p>
+
+
+## Requirement
+  - **Python 3.8.2 or above**
+  - **GPU (recommended)**
+  - **Tensorflow**
+  - **Keras**
+  - **Matplotlib**
+  - **Cifar10**
+  
+ 
