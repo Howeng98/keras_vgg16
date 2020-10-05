@@ -7,10 +7,11 @@ Original file is located at
     https://colab.research.google.com/drive/1lZPGlN_fV894xGCJLQ-WlTSjvml3BVa4
 """
 
+from keras.datasets import cifar10
+import os
 import numpy as np
 import matplotlib.pyplot as plt
 import tensorflow as tf
-from keras.datasets import cifar10
 from tensorflow.python.client import device_lib
 from tensorflow import keras
 from keras.utils import np_utils,plot_model
@@ -22,37 +23,11 @@ tf.test.gpu_device_name()
 device_lib.list_local_devices()
 
 (x_train,y_train),(x_test,y_test) = cifar10.load_data()
-print(x_train.shape)
-print(y_train.shape)
-# print(x_test.shape)
-# print(y_test.shape)
-# x_train, y_train, y_new_train, y_new_test = train_test_split(x_train,y_train,test_size = 0.7)
-print(x_train.shape)
-print(y_train.shape)
-# print(x_test.shape)
-# print(y_test.shape)
-# print(y_new_train.shape)
-# print(y_new_test.shape)
-
-def show_image(image):
-  fig = plt.gcf()
-  fig.set_size_inches(5,5)
-  plt.imshow(image,cmap='binary')
-  plt.show()
-
-# print(y_train[10])
-# show_image(x_train[10])
-
 x_train = x_train.astype('float32')/255.0
 x_test = x_test.astype('float32')/255.0
-# x_test  = x_test.reshape(-1,x_test.shape[1],x_test.shape[2],3)
-# y_test  = y_test.reshape(-1,y_test.shape[1],y_test.shape[2],3)
 
 y_train = np_utils.to_categorical(y_train,10)
 y_test = np_utils.to_categorical(y_test,10)
-
-# print(y_train.shape)
-# print(y_test.shape)
 
 # Variables
 batch_size = 64
@@ -65,30 +40,21 @@ model = keras.Sequential()
 model.add(keras.layers.Conv2D(32, kernel_size=(5,5), activation='relu',input_shape=(32,32,3),padding='same'))
 model.add(keras.layers.MaxPooling2D(pool_size=(2,2)))
 model.add(keras.layers.Conv2D(64, kernel_size=(5,5), activation='relu',input_shape=(32,32,3),padding='same'))
+model.add(keras.layers.Conv2D(64, kernel_size=(5,5), activation='relu',input_shape=(32,32,3),padding='same'))
 model.add(keras.layers.MaxPooling2D(pool_size=(2,2)))
-model.add(keras.layers.Conv2D(128, kernel_size=(5,5), activation='relu',input_shape=(32,32,3),padding='same'))
+model.add(keras.layers.Conv2D(128, kernel_size=(3,3), activation='relu',input_shape=(32,32,3),padding='same'))
+model.add(keras.layers.Conv2D(128, kernel_size=(3,3), activation='relu',input_shape=(32,32,3),padding='same'))
+
 model.add(keras.layers.MaxPooling2D(pool_size=(2,2)))
 model.add(keras.layers.Flatten())
 model.add(keras.layers.Dense(512, activation='relu'))
-model.add(keras.layers.Dropout(0.5))
+model.add(keras.layers.Dropout(0.25))
+model.add(keras.layers.Dense(512, activation='relu'))
+model.add(keras.layers.Dropout(0.25))
 model.add(keras.layers.Dense(num_classes, activation='softmax'))
+
 model.summary()
-
-# model = keras.Sequential()
-# model.add(keras.layers.Conv2D(128, kernel_size=(5,5), activation='relu',input_shape=(32,32,3),padding='same'))
-# model.add(keras.layers.MaxPooling2D(pool_size=(2,2)))
-# model.add(keras.layers.Conv2D(128, kernel_size=(5,5), activation='relu',input_shape=(32,32,3),padding='same'))
-# model.add(keras.layers.MaxPooling2D(pool_size=(2,2)))
-# model.add(keras.layers.Conv2D(128, kernel_size=(5,5), activation='relu',input_shape=(32,32,3),padding='same'))
-# model.add(keras.layers.MaxPooling2D(pool_size=(2,2)))
-# model.add(keras.layers.Flatten())
-# model.add(keras.layers.Dense(512, activation='relu'))
-# model.add(keras.layers.Dropout(0.5))
-# model.add(keras.layers.Dense(num_classes, activation='softmax'))
-# model.summary()
-
-# from keras.datasets import cifar10
-# (x_train,y_train),(x_test,y_test) = cifar10.load_data()
+plot_model(model, to_file='model.png')
 
 print(x_train.shape)
 print(y_train.shape)
@@ -97,6 +63,15 @@ print(y_test.shape)
 
 model.compile(loss='categorical_crossentropy', metrics=['accuracy'], optimizer='adam')
 history = model.fit(x_train,y_train, batch_size=64, epochs=epochs, verbose=1, validation_data=(x_test,y_test))
+
+# Saving the model
+save_dir = 'drive/My Drive/Colab Notebooks'
+model_name = 'cifar10.h5'
+model_path = os.path.join(save_dir, model_name)
+model.save(model_path)
+print('Saved trained model at %s ' % model_path)
+
+# Evaluate
 test_loss, test_acc = model.evaluate(x_test,y_test)
 print('Test Accuracy',test_acc)
 
@@ -111,6 +86,7 @@ plt.title('model accuracy')
 plt.ylabel('accuracy')
 plt.xlabel('epoch')
 plt.legend(['train', 'test'], loc='lower right')
+plt.savefig('model_accuracy.png')
 plt.show()
 
 #plt.subplot(2,1,2)
@@ -121,6 +97,7 @@ plt.title('model loss')
 plt.ylabel('loss')
 plt.xlabel('epoch')
 plt.legend(['train', 'test'], loc='upper right')
+plt.savefig('model_loss.png')
 plt.show()
 
 # Predict
@@ -128,12 +105,14 @@ plt.show()
 # 5 = Dog, 6 = Frog, 7 = Horse, 8 = Ship, 9 = Truck
 from random import randint
 
-for i in range(4):  
-    plt.subplot(2,2,i+1)
+for i in range(10):  
+    plt.subplot(2,5,i+1)
+    plt.rcParams["figure.figsize"] = (20,9)
     index = randint(0,9999)
     plt.imshow(x_train[index])
     plt.xticks([])
     plt.yticks([])
     prediction = model.predict_classes(x_train[index].reshape(1,32,32,3))
     plt.title(prediction)
+    plt.savefig('test_set.png')
 plt.show()
