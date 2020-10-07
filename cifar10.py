@@ -7,13 +7,13 @@ Original file is located at
     https://colab.research.google.com/drive/1lZPGlN_fV894xGCJLQ-WlTSjvml3BVa4
 """
 
-from keras.datasets import cifar10
 import os
 import numpy as np
 import matplotlib.pyplot as plt
 import tensorflow as tf
 from tensorflow.python.client import device_lib
 from tensorflow import keras
+from keras.datasets import cifar10
 from keras.utils import np_utils,plot_model
 from keras.layers import Dense, Dropout, Flatten, Conv2D, MaxPool2D
 from keras.models import Sequential, load_model
@@ -26,8 +26,8 @@ device_lib.list_local_devices()
 x_train = x_train.astype('float32')/255.0
 x_test = x_test.astype('float32')/255.0
 
-y_train = np_utils.to_categorical(y_train,10)
-y_test = np_utils.to_categorical(y_test,10)
+y_train = np_utils.to_categorical(y_train,1000)
+y_test = np_utils.to_categorical(y_test,1000)
 
 # Variables
 batch_size = 64
@@ -37,21 +37,20 @@ epochs = 10
 
 # my model
 model = keras.Sequential()
-model.add(keras.layers.Conv2D(32, kernel_size=(5,5), activation='relu',input_shape=(32,32,3),padding='same'))
+model.add(keras.layers.Conv2D(96,  kernel_size=(11,11),strides=(1,1), activation='relu',input_shape=(32,32,3),padding='same'))
 model.add(keras.layers.MaxPooling2D(pool_size=(2,2)))
-model.add(keras.layers.Conv2D(64, kernel_size=(5,5), activation='relu',input_shape=(32,32,3),padding='same'))
-model.add(keras.layers.Conv2D(64, kernel_size=(5,5), activation='relu',input_shape=(32,32,3),padding='same'))
+model.add(keras.layers.Conv2D(256, kernel_size=(5,5),strides=(1,1), activation='relu',input_shape=(32,32,3),padding='same'))
 model.add(keras.layers.MaxPooling2D(pool_size=(2,2)))
-model.add(keras.layers.Conv2D(128, kernel_size=(3,3), activation='relu',input_shape=(32,32,3),padding='same'))
-model.add(keras.layers.Conv2D(128, kernel_size=(3,3), activation='relu',input_shape=(32,32,3),padding='same'))
-
+model.add(keras.layers.Conv2D(384, kernel_size=(3,3),strides=(1,1), activation='relu',input_shape=(32,32,3),padding='same'))
+model.add(keras.layers.Conv2D(384, kernel_size=(3,3),strides=(1,1), activation='relu',input_shape=(32,32,3),padding='same'))
+model.add(keras.layers.Conv2D(256, kernel_size=(3,3),strides=(1,1), activation='relu',input_shape=(32,32,3),padding='same'))
 model.add(keras.layers.MaxPooling2D(pool_size=(2,2)))
 model.add(keras.layers.Flatten())
-model.add(keras.layers.Dense(512, activation='relu'))
-model.add(keras.layers.Dropout(0.25))
-model.add(keras.layers.Dense(512, activation='relu'))
-model.add(keras.layers.Dropout(0.25))
-model.add(keras.layers.Dense(num_classes, activation='softmax'))
+model.add(keras.layers.Dense(4096, activation='relu'))
+model.add(keras.layers.Dropout(0.5))
+model.add(keras.layers.Dense(4096, activation='relu'))
+model.add(keras.layers.Dropout(0.5))
+model.add(keras.layers.Dense(1000, activation='softmax'))
 
 model.summary()
 plot_model(model, to_file='model.png')
@@ -62,7 +61,7 @@ print(x_test.shape)
 print(y_test.shape)
 
 model.compile(loss='categorical_crossentropy', metrics=['accuracy'], optimizer='adam')
-history = model.fit(x_train,y_train, batch_size=64, epochs=epochs, verbose=1, validation_data=(x_test,y_test))
+history = model.fit(x_train,y_train, batch_size=batch_size, epochs=epochs, verbose=1, validation_data=(x_test,y_test))
 
 # Saving the model
 save_dir = 'drive/My Drive/Colab Notebooks'
