@@ -38,7 +38,7 @@ epochs = 10
 
 # my model
 model = keras.Sequential()
-model.add(keras.layers.Conv2D(96,  kernel_size=(11,11),strides=(1,1), activation='relu',input_shape=(32,32,3),padding='same'))
+model.add(keras.layers.Conv2D(96,  kernel_size=(11,11),strides=(4,4), activation='relu',input_shape=(32,32,3),padding='same'))
 model.add(keras.layers.MaxPooling2D(pool_size=(2,2)))
 model.add(keras.layers.Conv2D(256, kernel_size=(5,5),strides=(1,1), activation='relu',input_shape=(32,32,3),padding='same'))
 model.add(keras.layers.MaxPooling2D(pool_size=(2,2)))
@@ -47,9 +47,9 @@ model.add(keras.layers.Conv2D(384, kernel_size=(3,3),strides=(1,1), activation='
 model.add(keras.layers.Conv2D(256, kernel_size=(3,3),strides=(1,1), activation='relu',input_shape=(32,32,3),padding='same'))
 model.add(keras.layers.MaxPooling2D(pool_size=(2,2)))
 model.add(keras.layers.Flatten())
-model.add(keras.layers.Dense(512, activation='relu'))
+model.add(keras.layers.Dense(4096, activation='relu'))
 model.add(keras.layers.Dropout(0.5))
-model.add(keras.layers.Dense(512, activation='relu'))
+model.add(keras.layers.Dense(4096, activation='relu'))
 model.add(keras.layers.Dropout(0.5))
 model.add(keras.layers.Dense(500, activation='softmax'))
 
