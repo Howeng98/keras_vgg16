@@ -27,8 +27,8 @@ x_train = x_train.astype('float32')/255.0
 x_test = x_test.astype('float32')/255.0
 
 
-y_train = np_utils.to_categorical(y_train,10)
-y_test = np_utils.to_categorical(y_test,10)
+y_train = np_utils.to_categorical(y_train,500)
+y_test = np_utils.to_categorical(y_test,500)
 
 # Variables
 batch_size = 64
@@ -38,7 +38,7 @@ epochs = 10
 
 # my model
 model = keras.Sequential()
-model.add(keras.layers.Conv2D(96,  kernel_size=(11,11),strides=(4,4), activation='relu',input_shape=(32,32,3),padding='same'))
+model.add(keras.layers.Conv2D(96,  kernel_size=(11,11),strides=(1,1), activation='relu',input_shape=(32,32,3),padding='same'))
 model.add(keras.layers.MaxPooling2D(pool_size=(2,2)))
 model.add(keras.layers.Conv2D(256, kernel_size=(5,5),strides=(1,1), activation='relu',input_shape=(32,32,3),padding='same'))
 model.add(keras.layers.MaxPooling2D(pool_size=(2,2)))
@@ -51,7 +51,7 @@ model.add(keras.layers.Dense(512, activation='relu'))
 model.add(keras.layers.Dropout(0.5))
 model.add(keras.layers.Dense(512, activation='relu'))
 model.add(keras.layers.Dropout(0.5))
-model.add(keras.layers.Dense(10, activation='softmax'))
+model.add(keras.layers.Dense(500, activation='softmax'))
 
 model.summary()
 plot_model(model, to_file='model.png')
