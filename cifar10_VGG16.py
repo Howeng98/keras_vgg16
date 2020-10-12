@@ -18,54 +18,77 @@ from keras.utils import np_utils,plot_model
 from keras.layers import Dense, Dropout, Flatten, Conv2D, MaxPool2D
 from keras.models import Sequential, load_model
 from sklearn.model_selection import train_test_split
+from keras.preprocessing.image import ImageDataGenerator
+from keras.initializers import he_normal
+from keras.callbacks import LearningRateScheduler, TensorBoard
+from keras.utils.data_utils import get_file
+from keras import regularizers
 
 tf.test.gpu_device_name()
 device_lib.list_local_devices()
 
 (x_train,y_train),(x_test,y_test) = cifar10.load_data()
-x_train = x_train.astype('float32')/255.0
-x_test = x_test.astype('float32')/255.0
+x_train = x_train.astype('float32')
+x_test = x_test.astype('float32')
+
+# mean = np.mean(x_train,axis=(0,1,2,3))
+# std = np.std(x_train, axis=(0, 1, 2, 3))
+# x_train = (x_train-mean)/(std+1e-7)
+# x_test  = (x_test-mean)/(std+1e-7)
 
 
 y_train = np_utils.to_categorical(y_train,10)
 y_test = np_utils.to_categorical(y_test,10)
 
 # Variables
-batch_size = 32
+batch_size = 128
 num_classes = 10
 epochs = 10
+iterations = 391
+weight_decay = 0.0001
+log_filepath = r'./vgg16_pretain/'
+
+def scheduler(epoch):
+    if epoch <= 80:
+        return 0.01
+    if epoch <= 140:
+        return 0.005
+    return 0.001
+
+# WEIGHTS_PATH = 'https://github.com/fchollet/deep-learning-models/releases/download/v0.1/vgg19_weights_tf_dim_ordering_tf_kernels.h5'
+# filepath = get_file('vgg19_weights_tf_dim_ordering_tf_kernels.h5', WEIGHTS_PATH, cache_subdir='models')
 
 
 # my model - VGG16
 model = keras.Sequential()
 # Block 1
-model.add(keras.layers.Conv2D(64,  kernel_size=(3,3),strides=(1,1), activation='relu',input_shape=(32,32,3),padding='same'))
-model.add(keras.layers.Conv2D(64,  kernel_size=(3,3),strides=(1,1), activation='relu',input_shape=(32,32,3),padding='same'))
+model.add(keras.layers.Conv2D(64,  kernel_size=(3,3), activation='relu',input_shape=(32,32,3),padding='same', kernel_regularizer=keras.regularizers.l2(weight_decay), kernel_initializer=he_normal()))
+model.add(keras.layers.Conv2D(64,  kernel_size=(3,3), activation='relu',input_shape=(32,32,3),padding='same', kernel_regularizer=keras.regularizers.l2(weight_decay), kernel_initializer=he_normal()))
 model.add(keras.layers.MaxPooling2D(pool_size=(2,2),strides=(2,2)))
 # Block 2
-model.add(keras.layers.Conv2D(128, kernel_size=(3,3),strides=(1,1), activation='relu',input_shape=(32,32,3),padding='same'))
-model.add(keras.layers.Conv2D(128, kernel_size=(3,3),strides=(1,1), activation='relu',input_shape=(32,32,3),padding='same'))
+model.add(keras.layers.Conv2D(128,  kernel_size=(3,3), activation='relu',input_shape=(32,32,3),padding='same', kernel_regularizer=keras.regularizers.l2(weight_decay), kernel_initializer=he_normal()))
+model.add(keras.layers.Conv2D(128,  kernel_size=(3,3), activation='relu',input_shape=(32,32,3),padding='same', kernel_regularizer=keras.regularizers.l2(weight_decay), kernel_initializer=he_normal()))
 model.add(keras.layers.MaxPooling2D(pool_size=(2,2),strides=(2,2)))
 # Block 3
-model.add(keras.layers.Conv2D(256, kernel_size=(3,3),strides=(1,1), activation='relu',input_shape=(32,32,3),padding='same'))
-model.add(keras.layers.Conv2D(256, kernel_size=(3,3),strides=(1,1), activation='relu',input_shape=(32,32,3),padding='same'))
-model.add(keras.layers.Conv2D(256, kernel_size=(3,3),strides=(1,1), activation='relu',input_shape=(32,32,3),padding='same'))
+model.add(keras.layers.Conv2D(256,  kernel_size=(3,3), activation='relu',input_shape=(32,32,3),padding='same', kernel_regularizer=keras.regularizers.l2(weight_decay), kernel_initializer=he_normal()))
+model.add(keras.layers.Conv2D(256,  kernel_size=(3,3), activation='relu',input_shape=(32,32,3),padding='same', kernel_regularizer=keras.regularizers.l2(weight_decay), kernel_initializer=he_normal()))
+model.add(keras.layers.Conv2D(256,  kernel_size=(3,3), activation='relu',input_shape=(32,32,3),padding='same', kernel_regularizer=keras.regularizers.l2(weight_decay), kernel_initializer=he_normal()))
 model.add(keras.layers.MaxPooling2D(pool_size=(2,2),strides=(2,2)))
 # Block 4
-model.add(keras.layers.Conv2D(512, kernel_size=(3,3),strides=(1,1), activation='relu',input_shape=(32,32,3),padding='same'))
-model.add(keras.layers.Conv2D(512, kernel_size=(3,3),strides=(1,1), activation='relu',input_shape=(32,32,3),padding='same'))
-model.add(keras.layers.Conv2D(512, kernel_size=(3,3),strides=(1,1), activation='relu',input_shape=(32,32,3),padding='same'))
+model.add(keras.layers.Conv2D(512,  kernel_size=(3,3), activation='relu',input_shape=(32,32,3),padding='same', kernel_regularizer=keras.regularizers.l2(weight_decay), kernel_initializer=he_normal()))
+model.add(keras.layers.Conv2D(512,  kernel_size=(3,3), activation='relu',input_shape=(32,32,3),padding='same', kernel_regularizer=keras.regularizers.l2(weight_decay), kernel_initializer=he_normal()))
+model.add(keras.layers.Conv2D(512,  kernel_size=(3,3), activation='relu',input_shape=(32,32,3),padding='same', kernel_regularizer=keras.regularizers.l2(weight_decay), kernel_initializer=he_normal()))
 model.add(keras.layers.MaxPooling2D(pool_size=(2,2),strides=(2,2)))
 # Block 5
-model.add(keras.layers.Conv2D(512, kernel_size=(3,3),strides=(1,1), activation='relu',input_shape=(32,32,3),padding='same'))
-model.add(keras.layers.Conv2D(512, kernel_size=(3,3),strides=(1,1), activation='relu',input_shape=(32,32,3),padding='same'))
-model.add(keras.layers.Conv2D(512, kernel_size=(3,3),strides=(1,1), activation='relu',input_shape=(32,32,3),padding='same'))
+model.add(keras.layers.Conv2D(512,  kernel_size=(3,3), activation='relu',input_shape=(32,32,3),padding='same', kernel_regularizer=keras.regularizers.l2(weight_decay), kernel_initializer=he_normal()))
+model.add(keras.layers.Conv2D(512,  kernel_size=(3,3), activation='relu',input_shape=(32,32,3),padding='same', kernel_regularizer=keras.regularizers.l2(weight_decay), kernel_initializer=he_normal()))
+model.add(keras.layers.Conv2D(512,  kernel_size=(3,3), activation='relu',input_shape=(32,32,3),padding='same', kernel_regularizer=keras.regularizers.l2(weight_decay), kernel_initializer=he_normal()))
 model.add(keras.layers.MaxPooling2D(pool_size=(2,2),strides=(2,2)))
 model.add(keras.layers.Flatten())
-model.add(keras.layers.Dense(1024, activation='relu'))
-model.add(keras.layers.Dropout(0.5))
-model.add(keras.layers.Dense(1024, activation='relu'))
-# model.add(keras.layers.Dropout(0.5))
+model.add(keras.layers.Dense(512, activation='relu',kernel_regularizer=keras.regularizers.l2(weight_decay), kernel_initializer=he_normal()))
+model.add(keras.layers.Dropout(0.25))
+model.add(keras.layers.Dense(512, activation='relu',kernel_regularizer=keras.regularizers.l2(weight_decay), kernel_initializer=he_normal()))
+model.add(keras.layers.Dropout(0.25))
 model.add(keras.layers.Dense(10, activation='softmax'))
 
 model.summary()
@@ -76,8 +99,24 @@ print(y_train.shape)
 print(x_test.shape)
 print(y_test.shape)
 
-model.compile(loss='categorical_crossentropy', metrics=['accuracy'], optimizer='adam')
-history = model.fit(x_train,y_train, batch_size=batch_size, epochs=epochs, verbose=1, validation_data=(x_test,y_test))
+# Optimizer setting
+sgd = optimizers.SGD(lr=0.1, momentum=0.9, nesterov=True)
+model.compile(loss='categorical_crossentropy', metrics=['accuracy'], optimizer='sgd')
+
+tb_cb = TensorBoard(log_dir=log_filepath, histogram_freq=0)
+change_lr = LearningRateScheduler(scheduler)
+cbks = [change_lr,tb_cb]
+
+datagen = ImageDataGenerator(horizontal_flip=True,width_shift_range=0.125,height_shift_range=0.125,fill_mode='constant',cval=0.)
+datagen.fit(x_train)
+
+
+# history = model.fit(x_train,y_train, batch_size=batch_size, epochs=epochs, verbose=2, validation_data=(x_test,y_test))
+model.fit_generator(datagen.flow(x_train, y_train,batch_size=batch_size),
+                    steps_per_epoch=iterations,
+                    epochs=epochs,
+                    callbacks=cbks,
+                    validation_data=(x_test, y_test))
 
 # Saving the model
 save_dir = 'drive/My Drive/Colab Notebooks'
@@ -131,3 +170,117 @@ for i in range(10):
     plt.title(prediction)
     plt.savefig('test_set.png')
 plt.show()
+
+from keras.datasets import cifar10
+from keras.preprocessing.image import ImageDataGenerator
+from keras.models import Sequential
+from keras.layers import Dense, Dropout, Activation, Flatten
+from keras.layers import Conv2D, MaxPooling2D, BatchNormalization
+from keras import optimizers
+import numpy as np
+from keras.layers.core import Lambda
+from keras import backend as K
+from keras.optimizers import SGD
+from keras import regularizers
+#import data
+(x_train, y_train), (x_test, y_test) = cifar10.load_data()
+x_train = x_train.astype('float32')
+x_test = x_test.astype('float32')
+y_train = keras.utils.to_categorical(y_train, 10)
+y_test = keras.utils.to_categorical(y_test, 10)
+
+weight_decay = 0.0005
+nb_epoch=100
+batch_size=32
+
+#layer1 32*32*3
+model = Sequential()
+model.add(Conv2D(64, (3, 3), padding='same',
+input_shape=(32,32,3),kernel_regularizer=regularizers.l2(weight_decay)))
+model.add(Activation('relu'))
+model.add(BatchNormalization())
+model.add(Dropout(0.3))
+#layer2 32*32*64
+model.add(Conv2D(64, (3, 3), padding='same',kernel_regularizer=regularizers.l2(weight_decay)))
+model.add(Activation('relu'))
+model.add(BatchNormalization())
+model.add(MaxPooling2D(pool_size=(2, 2)))
+#layer3 16*16*64
+model.add(Conv2D(128, (3, 3), padding='same',kernel_regularizer=regularizers.l2(weight_decay)))
+model.add(Activation('relu'))
+model.add(BatchNormalization())
+model.add(Dropout(0.4))
+#layer4 16*16*128
+model.add(Conv2D(128, (3, 3), padding='same',kernel_regularizer=regularizers.l2(weight_decay)))
+model.add(Activation('relu'))
+model.add(BatchNormalization())
+model.add(MaxPooling2D(pool_size=(2, 2)))
+#layer5 8*8*128
+model.add(Conv2D(256, (3, 3), padding='same',kernel_regularizer=regularizers.l2(weight_decay)))
+model.add(Activation('relu'))
+model.add(BatchNormalization())
+model.add(Dropout(0.4))
+#layer6 8*8*256
+model.add(Conv2D(256, (3, 3), padding='same',kernel_regularizer=regularizers.l2(weight_decay)))
+model.add(Activation('relu'))
+model.add(BatchNormalization())
+model.add(Dropout(0.4))
+#layer7 8*8*256
+model.add(Conv2D(256, (3, 3), padding='same',kernel_regularizer=regularizers.l2(weight_decay)))
+model.add(Activation('relu'))
+model.add(BatchNormalization())
+model.add(MaxPooling2D(pool_size=(2, 2)))
+#layer8 4*4*256
+model.add(Conv2D(512, (3, 3), padding='same',kernel_regularizer=regularizers.l2(weight_decay)))
+model.add(Activation('relu'))
+model.add(BatchNormalization())
+model.add(Dropout(0.4))
+#layer9 4*4*512
+model.add(Conv2D(512, (3, 3), padding='same',kernel_regularizer=regularizers.l2(weight_decay)))
+model.add(Activation('relu'))
+model.add(BatchNormalization())
+model.add(Dropout(0.4))
+#layer10 4*4*512
+model.add(Conv2D(512, (3, 3), padding='same',kernel_regularizer=regularizers.l2(weight_decay)))
+model.add(Activation('relu'))
+model.add(BatchNormalization())
+model.add(MaxPooling2D(pool_size=(2, 2)))
+#layer11 2*2*512
+model.add(Conv2D(512, (3, 3), padding='same',kernel_regularizer=regularizers.l2(weight_decay)))
+model.add(Activation('relu'))
+model.add(BatchNormalization())
+model.add(Dropout(0.4))
+#layer12 2*2*512
+model.add(Conv2D(512, (3, 3), padding='same',kernel_regularizer=regularizers.l2(weight_decay)))
+model.add(Activation('relu'))
+model.add(BatchNormalization())
+model.add(Dropout(0.4))
+#layer13 2*2*512
+model.add(Conv2D(512, (3, 3), padding='same',kernel_regularizer=regularizers.l2(weight_decay)))
+model.add(Activation('relu'))
+model.add(BatchNormalization())
+model.add(MaxPooling2D(pool_size=(2, 2)))
+model.add(Dropout(0.5))
+#layer14 1*1*512
+model.add(Flatten())
+model.add(Dense(512,kernel_regularizer=regularizers.l2(weight_decay)))
+model.add(Activation('relu'))
+model.add(BatchNormalization())
+#layer15 512
+model.add(Dense(512,kernel_regularizer=regularizers.l2(weight_decay)))
+model.add(Activation('relu'))
+model.add(BatchNormalization())
+#layer16 512
+model.add(Dropout(0.5))
+model.add(Dense(10))
+model.add(Activation('softmax'))
+# 10
+
+sgd = SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True)
+model.compile(loss='categorical_crossentropy', optimizer=sgd,metrics=['accuracy'])
+
+model.fit(x_train,y_train,epochs=nb_epoch, batch_size=batch_size,
+             validation_split=0.1, verbose=1)
+
+test_loss, test_acc = model.evaluate(x_test,y_test)
+print('Test Accuracy',test_acc)
