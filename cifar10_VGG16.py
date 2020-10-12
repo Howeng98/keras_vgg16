@@ -27,11 +27,11 @@ x_train = x_train.astype('float32')/255.0
 x_test = x_test.astype('float32')/255.0
 
 
-y_train = np_utils.to_categorical(y_train,1000)
-y_test = np_utils.to_categorical(y_test,1000)
+y_train = np_utils.to_categorical(y_train,10)
+y_test = np_utils.to_categorical(y_test,10)
 
 # Variables
-batch_size = 64
+batch_size = 32
 num_classes = 10
 epochs = 10
 
@@ -62,11 +62,11 @@ model.add(keras.layers.Conv2D(512, kernel_size=(3,3),strides=(1,1), activation='
 model.add(keras.layers.Conv2D(512, kernel_size=(3,3),strides=(1,1), activation='relu',input_shape=(32,32,3),padding='same'))
 model.add(keras.layers.MaxPooling2D(pool_size=(2,2),strides=(2,2)))
 model.add(keras.layers.Flatten())
-model.add(keras.layers.Dense(4096, activation='relu'))
+model.add(keras.layers.Dense(1024, activation='relu'))
 model.add(keras.layers.Dropout(0.5))
-model.add(keras.layers.Dense(4096, activation='relu'))
-model.add(keras.layers.Dropout(0.5))
-model.add(keras.layers.Dense(1000, activation='softmax'))
+model.add(keras.layers.Dense(1024, activation='relu'))
+# model.add(keras.layers.Dropout(0.5))
+model.add(keras.layers.Dense(10, activation='softmax'))
 
 model.summary()
 plot_model(model, to_file='model.png')
