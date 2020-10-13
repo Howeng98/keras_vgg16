@@ -15,7 +15,7 @@ from tensorflow.python.client import device_lib
 from tensorflow import keras
 from keras.datasets import cifar10
 from keras.utils import np_utils,plot_model
-from keras.layers import Dense, Dropout, Flatten, Conv2D, MaxPool2D
+from keras.layers import Dense, Dropout, Flatten, Conv2D, MaxPool2D, BatchNormalization
 from keras.models import Sequential, load_model
 from sklearn.model_selection import train_test_split
 from keras.preprocessing.image import ImageDataGenerator
@@ -23,6 +23,7 @@ from keras.initializers import he_normal
 from keras.callbacks import LearningRateScheduler, TensorBoard
 from keras.utils.data_utils import get_file
 from keras import regularizers
+from keras.optimizers import SGD
 
 tf.test.gpu_device_name()
 device_lib.list_local_devices()
@@ -41,11 +42,11 @@ y_train = np_utils.to_categorical(y_train,10)
 y_test = np_utils.to_categorical(y_test,10)
 
 # Variables
-batch_size = 128
+batch_size = 32
 num_classes = 10
 epochs = 10
 iterations = 391
-weight_decay = 0.0001
+weight_decay = 0.0005
 log_filepath = r'./vgg16_pretain/'
 
 def scheduler(epoch):
@@ -63,33 +64,57 @@ def scheduler(epoch):
 model = keras.Sequential()
 # Block 1
 model.add(keras.layers.Conv2D(64,  kernel_size=(3,3), activation='relu',input_shape=(32,32,3),padding='same', kernel_regularizer=keras.regularizers.l2(weight_decay), kernel_initializer=he_normal()))
+model.add(BatchNormalization())
+model.add(keras.layers.Dropout(0.3))
 model.add(keras.layers.Conv2D(64,  kernel_size=(3,3), activation='relu',input_shape=(32,32,3),padding='same', kernel_regularizer=keras.regularizers.l2(weight_decay), kernel_initializer=he_normal()))
+model.add(BatchNormalization())
 model.add(keras.layers.MaxPooling2D(pool_size=(2,2),strides=(2,2)))
 # Block 2
 model.add(keras.layers.Conv2D(128,  kernel_size=(3,3), activation='relu',input_shape=(32,32,3),padding='same', kernel_regularizer=keras.regularizers.l2(weight_decay), kernel_initializer=he_normal()))
+model.add(BatchNormalization())
+model.add(keras.layers.Dropout(0.4))
 model.add(keras.layers.Conv2D(128,  kernel_size=(3,3), activation='relu',input_shape=(32,32,3),padding='same', kernel_regularizer=keras.regularizers.l2(weight_decay), kernel_initializer=he_normal()))
+model.add(BatchNormalization())
 model.add(keras.layers.MaxPooling2D(pool_size=(2,2),strides=(2,2)))
 # Block 3
 model.add(keras.layers.Conv2D(256,  kernel_size=(3,3), activation='relu',input_shape=(32,32,3),padding='same', kernel_regularizer=keras.regularizers.l2(weight_decay), kernel_initializer=he_normal()))
+model.add(BatchNormalization())
+model.add(keras.layers.Dropout(0.4))
 model.add(keras.layers.Conv2D(256,  kernel_size=(3,3), activation='relu',input_shape=(32,32,3),padding='same', kernel_regularizer=keras.regularizers.l2(weight_decay), kernel_initializer=he_normal()))
+model.add(BatchNormalization())
+model.add(keras.layers.Dropout(0.4))
 model.add(keras.layers.Conv2D(256,  kernel_size=(3,3), activation='relu',input_shape=(32,32,3),padding='same', kernel_regularizer=keras.regularizers.l2(weight_decay), kernel_initializer=he_normal()))
+model.add(BatchNormalization())
 model.add(keras.layers.MaxPooling2D(pool_size=(2,2),strides=(2,2)))
 # Block 4
 model.add(keras.layers.Conv2D(512,  kernel_size=(3,3), activation='relu',input_shape=(32,32,3),padding='same', kernel_regularizer=keras.regularizers.l2(weight_decay), kernel_initializer=he_normal()))
+model.add(BatchNormalization())
+model.add(keras.layers.Dropout(0.4))
 model.add(keras.layers.Conv2D(512,  kernel_size=(3,3), activation='relu',input_shape=(32,32,3),padding='same', kernel_regularizer=keras.regularizers.l2(weight_decay), kernel_initializer=he_normal()))
+model.add(BatchNormalization())
+model.add(keras.layers.Dropout(0.4))
 model.add(keras.layers.Conv2D(512,  kernel_size=(3,3), activation='relu',input_shape=(32,32,3),padding='same', kernel_regularizer=keras.regularizers.l2(weight_decay), kernel_initializer=he_normal()))
+model.add(BatchNormalization())
 model.add(keras.layers.MaxPooling2D(pool_size=(2,2),strides=(2,2)))
 # Block 5
 model.add(keras.layers.Conv2D(512,  kernel_size=(3,3), activation='relu',input_shape=(32,32,3),padding='same', kernel_regularizer=keras.regularizers.l2(weight_decay), kernel_initializer=he_normal()))
+model.add(BatchNormalization())
+model.add(keras.layers.Dropout(0.4))
 model.add(keras.layers.Conv2D(512,  kernel_size=(3,3), activation='relu',input_shape=(32,32,3),padding='same', kernel_regularizer=keras.regularizers.l2(weight_decay), kernel_initializer=he_normal()))
+model.add(BatchNormalization())
+model.add(keras.layers.Dropout(0.4))
 model.add(keras.layers.Conv2D(512,  kernel_size=(3,3), activation='relu',input_shape=(32,32,3),padding='same', kernel_regularizer=keras.regularizers.l2(weight_decay), kernel_initializer=he_normal()))
+model.add(BatchNormalization())
+model.add(keras.layers.Dropout(0.5))
 model.add(keras.layers.MaxPooling2D(pool_size=(2,2),strides=(2,2)))
 model.add(keras.layers.Flatten())
 model.add(keras.layers.Dense(512, activation='relu',kernel_regularizer=keras.regularizers.l2(weight_decay), kernel_initializer=he_normal()))
-model.add(keras.layers.Dropout(0.25))
+model.add(BatchNormalization())
 model.add(keras.layers.Dense(512, activation='relu',kernel_regularizer=keras.regularizers.l2(weight_decay), kernel_initializer=he_normal()))
-model.add(keras.layers.Dropout(0.25))
+model.add(BatchNormalization())
+model.add(keras.layers.Dropout(0.5))
 model.add(keras.layers.Dense(10, activation='softmax'))
+
 
 model.summary()
 plot_model(model, to_file='model.png')
@@ -100,8 +125,8 @@ print(x_test.shape)
 print(y_test.shape)
 
 # Optimizer setting
-sgd = optimizers.SGD(lr=0.1, momentum=0.9, nesterov=True)
-model.compile(loss='categorical_crossentropy', metrics=['accuracy'], optimizer='sgd')
+sgd = SGD(lr=0.1, momentum=0.9, nesterov=True)
+model.compile(loss='categorical_crossentropy', metrics=['accuracy'], optimizer='adam')
 
 tb_cb = TensorBoard(log_dir=log_filepath, histogram_freq=0)
 change_lr = LearningRateScheduler(scheduler)
@@ -112,11 +137,13 @@ datagen.fit(x_train)
 
 
 # history = model.fit(x_train,y_train, batch_size=batch_size, epochs=epochs, verbose=2, validation_data=(x_test,y_test))
-model.fit_generator(datagen.flow(x_train, y_train,batch_size=batch_size),
-                    steps_per_epoch=iterations,
-                    epochs=epochs,
-                    callbacks=cbks,
-                    validation_data=(x_test, y_test))
+# model.fit_generator(datagen.flow(x_train, y_train,batch_size=batch_size),
+#                     steps_per_epoch=iterations,
+#                     epochs=epochs,
+#                     callbacks=cbks,
+#                     validation_data=(x_test, y_test))
+model.fit(x_train,y_train,epochs=epochs,batch_size=batch_size, validation_split=0.1,verbose=1,validation_data=(x_test,y_test))
+
 
 # Saving the model
 save_dir = 'drive/My Drive/Colab Notebooks'
