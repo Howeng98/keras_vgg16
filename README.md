@@ -89,6 +89,18 @@ From the output we can observe that model **Loss** is getting decrease and **Acc
 
 ![.](img/model_loss.png)
 
+## Note
+I will take a note about what I had found about ***How the parameters affect your model accuracy and loss*** with this project as example. You also can check my commit history, I already mark down each change and how was the **Accuracy** affected,feel free to discuss with me!
+
+  1. **Normalization with Mean and Standard Deviation**
+     
+     With the ``mean`` and ``std`` functions which are provided by the numpy library can help you to calculate the mean and standard deviation of your training and testing data, and make it become smooth and extreme value, data become closer to the medium and mean value.**In conclusion, it work! but just increase 0.4% accuracy**. In my opinion, this way is not helpful with these data, maybe it will work on the dataset that have too much extreme value or dirty, incomplete datasets.
+     
+  2. **Weight Decay**
+     
+     Weight Decay is the new way to 
+
+
 ## Reference
 * https://blog.csdn.net/JaysonRen/article/details/103273519
 * https://www.itread01.com/content/1549021352.html
