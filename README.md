@@ -94,11 +94,11 @@ I will take a note about what I had found about ***How the Parameters and Regula
 
   1. **Normalization with Mean and Standard Deviation**
      
-     With the ``mean`` and ``std`` functions which are provided by the numpy library can help you to calculate the mean and standard deviation of your training and testing data, and make it become smooth and extreme value, data become closer to the medium and mean value.**In conclusion, it work! but just increase 0.4% accuracy**. In my opinion, this way is not helpful with these data, maybe it will work on the dataset that have too much extreme value or dirty, incomplete datasets.
+     With the ``mean`` and ``std`` functions which are provided by the ``numpy`` library can help you to calculate the **mean** and **standard deviation** of your training and testing data, and make it become smooth and extreme value, data become closer to the medium and mean value.**In conclusion, it work! but just increase 0.4% accuracy**. In my opinion, this way is not helpful with these data, maybe it will work on the dataset that have too much extreme value or dirty, incomplete datasets.
      
   2. **Weight Decay**
      
-     In a short word,``Weight Decay`` is one of the ``Regularization Techniques`` that used to avoid data become too specialized and cause overfitting.It will decrease the weight of each neuron and connection gradually and make our model not to become too complex.Once we get a greater value of ``Weight Decay``,that means the complex model will also have greater value of complex functions and complex problem.**At all, Weight Decay=0.005 will have a better performance than 0.001**.
+     In a short word,``Weight Decay`` is one of the ``Regularization Techniques`` that used to avoid data become too specialized and cause overfitting.It will decrease the weight of each neuron and connection gradually and make our model not to become too complex.Once we get a greater value of ``Weight Decay``,that means the complex model will also have greater value of ``complex functions`` and ``complex problem``.**At all, Weight Decay=0.005 will have a better performance than 0.001**.
      
   3. **Batch Normalization**
 
