@@ -22,7 +22,28 @@ Objective of this project is to classify the datasets which include some images 
 
 ## Structure 
 
-1. **Model Structure and Layers**
+1. **Neural Network Structure**
+  - **Alexnet**
+  <p align='center'>
+    <img src='img/alexnet_structure.png'>
+  </p>
+  
+  - **VGG16**
+  <p align='center'>
+    <img src='img/vgg16_structure_02.png'>
+  </p>
+  
+  
+  <p align='center'>
+    <img src='img/vgg16_structure_03.png'>
+  </p>
+  
+  
+  <p align='center'>
+    <img src='img/vgg16_structure_01.jpg'>
+  </p>
+
+2. **Model Structure and Layers(VGG16)**
 
 <p align='center'>
   <img src='img/model.png'>  
