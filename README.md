@@ -101,6 +101,8 @@ I will take a note about what I had found about ***How the Parameters and Regula
      In a short word,``Weight Decay`` is one of the ``Regularization Techniques`` that used to avoid data become too specialized and cause overfitting.It will decrease the weight of each neuron and connection gradually and make our model not to become too complex.Once we get a greater value of ``Weight Decay``,that means the complex model will also have greater value of ``complex functions`` and ``complex problem``.**At all, Weight Decay=0.005 will have a better performance than 0.001**.
      
   3. **Batch Normalization**
+  
+     This is the most important part that cause the 
 
 
 ## Reference
