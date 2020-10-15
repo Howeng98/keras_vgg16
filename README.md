@@ -74,6 +74,6 @@ Or you can run the .ipynb file on notebook for tracking the output of each line.
 ## Output
 The following output image show the **Pediction of the Model** and the **Label** of each image.
 The title of each image refer to it's **Model Prediction**,and the xlabel refer to it's **Label Answer**.
-And it is briefly to observe that there only got almost 70% accuracy of the prediction.
+And it is briefly to observe that there only got almost **70% accuracy** of the prediction.
 
 ![.](img/model_prediction.png)
