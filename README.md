@@ -88,3 +88,10 @@ From the output we can observe that model **Loss** is getting decrease and **Acc
 ![.](img/model_accuracy.png)
 
 ![.](img/model_loss.png)
+
+## Reference
+* https://blog.csdn.net/JaysonRen/article/details/103273519
+* https://www.itread01.com/content/1549021352.html
+* https://github.com/BIGBALLON/cifar-10-cnn
+* https://blog.csdn.net/bryant_meng/article/details/81626016
+* https://blog.csdn.net/zhuzuwei/article/details/78652890
