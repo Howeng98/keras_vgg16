@@ -32,13 +32,18 @@ device_lib.list_local_devices()
 x_train = x_train.astype('float32')
 x_test = x_test.astype('float32')
 
-# mean = np.mean(x_train,axis=(0,1,2,3))
-# std = np.std(x_train, axis=(0, 1, 2, 3))
-# x_train = (x_train-mean)/(std+1e-7)
-# x_test  = (x_test-mean)/(std+1e-7)
-
+# Make another variables to store data for plotting and predict
+img_x_train = x_train
+img_x_test = x_test
 y_train_label = y_train
 y_test_label  = y_test
+
+# Normalization
+mean = np.mean(x_train,axis=(0,1,2,3))
+std = np.std(x_train, axis=(0, 1, 2, 3))
+x_train = (x_train-mean)/(std+1e-7)
+x_test  = (x_test-mean)/(std+1e-7)
+
 
 y_train = np_utils.to_categorical(y_train,10)
 y_test = np_utils.to_categorical(y_test,10)
@@ -155,10 +160,10 @@ for i in range(10):
     plt.subplot(2,5,i+1)
     plt.rcParams["figure.figsize"] = (20,9)
     index = randint(0,9999)
-    plt.imshow(x_test[index].astype(np.uint8))
+    plt.imshow(img_x_test[index].astype(np.uint8))
     plt.xticks([])
     plt.yticks([])
-    prediction = model.predict_classes(x_test[index].reshape(-1,32,32,3))
+    prediction = model.predict_classes(img_x_test[index].reshape(-1,32,32,3))
     plt.xlabel(y_test_label[index])
     plt.title(prediction)
     plt.savefig('test_set.png')
