@@ -90,7 +90,7 @@ From the output we can observe that model **Loss** is getting decrease and **Acc
 ![.](img/model_loss.png)
 
 ## Note
-I will take a note about what I had found about ***How the parameters affect your model accuracy and loss*** with this project as example. You also can check my commit history, I already mark down each change and how was the **Accuracy** affected,feel free to discuss with me!
+I will take a note about what I had found about ***How the Parameters and Regularization affect your model accuracy and loss*** with this project as example. You also can check my commit history, I already mark down each change and how was the **Accuracy** affected.All the explanation will mentioned in a small word,I will make a clear **Technique Conclusion Note** later, and feel free to discuss with me!
 
   1. **Normalization with Mean and Standard Deviation**
      
@@ -98,7 +98,9 @@ I will take a note about what I had found about ***How the parameters affect you
      
   2. **Weight Decay**
      
-     Weight Decay is the new way to 
+     In a short word,``Weight Decay`` is one of the ``Regularization Techniques`` that used to avoid data become too specialized and cause overfitting.It will decrease the weight of each neuron and connection gradually and make our model not to become too complex.Once we get a greater value of ``Weight Decay``,that means the complex model will also have greater value of complex functions and complex problem.**At all, Weight Decay=0.005 will have a better performance than 0.001**.
+     
+  3. **Batch Normalization**
 
 
 ## Reference
