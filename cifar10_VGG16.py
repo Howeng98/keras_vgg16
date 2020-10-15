@@ -39,10 +39,10 @@ y_train_label = y_train
 y_test_label  = y_test
 
 # Normalization
-mean = np.mean(x_train,axis=(0,1,2,3))
-std = np.std(x_train, axis=(0, 1, 2, 3))
-x_train = (x_train-mean)/(std+1e-7)
-x_test  = (x_test-mean)/(std+1e-7)
+# mean = np.mean(x_train,axis=(0,1,2,3))
+# std = np.std(x_train, axis=(0, 1, 2, 3))
+# x_train = (x_train-mean)/(std+1e-7)
+# x_test  = (x_test-mean)/(std+1e-7)
 
 
 y_train = np_utils.to_categorical(y_train,10)
@@ -52,9 +52,7 @@ y_test = np_utils.to_categorical(y_test,10)
 batch_size = 32
 num_classes = 10
 epochs = 10
-iterations = 391
 weight_decay = 0.0005
-log_filepath = r'./vgg16_pretain/'
 
 
 # my model - VGG16
@@ -62,51 +60,44 @@ model = keras.Sequential()
 # Block 1
 model.add(keras.layers.Conv2D(64,  kernel_size=(3,3), activation='relu',input_shape=(32,32,3),padding='same', kernel_regularizer=keras.regularizers.l2(weight_decay)))
 model.add(BatchNormalization())
-# model.add(keras.layers.Dropout(0.3))
 model.add(keras.layers.Conv2D(64,  kernel_size=(3,3), activation='relu',input_shape=(32,32,3),padding='same', kernel_regularizer=keras.regularizers.l2(weight_decay)))
 model.add(BatchNormalization())
 model.add(keras.layers.MaxPooling2D(pool_size=(2,2),strides=(2,2)))
 # Block 2
 model.add(keras.layers.Conv2D(128,  kernel_size=(3,3), activation='relu',input_shape=(32,32,3),padding='same', kernel_regularizer=keras.regularizers.l2(weight_decay)))
 model.add(BatchNormalization())
-# model.add(keras.layers.Dropout(0.4))
 model.add(keras.layers.Conv2D(128,  kernel_size=(3,3), activation='relu',input_shape=(32,32,3),padding='same', kernel_regularizer=keras.regularizers.l2(weight_decay)))
 model.add(BatchNormalization())
 model.add(keras.layers.MaxPooling2D(pool_size=(2,2),strides=(2,2)))
 # Block 3
 model.add(keras.layers.Conv2D(256,  kernel_size=(3,3), activation='relu',input_shape=(32,32,3),padding='same', kernel_regularizer=keras.regularizers.l2(weight_decay)))
 model.add(BatchNormalization())
-# model.add(keras.layers.Dropout(0.4))
 model.add(keras.layers.Conv2D(256,  kernel_size=(3,3), activation='relu',input_shape=(32,32,3),padding='same', kernel_regularizer=keras.regularizers.l2(weight_decay)))
 model.add(BatchNormalization())
-# model.add(keras.layers.Dropout(0.4))
 model.add(keras.layers.Conv2D(256,  kernel_size=(3,3), activation='relu',input_shape=(32,32,3),padding='same', kernel_regularizer=keras.regularizers.l2(weight_decay)))
 model.add(BatchNormalization())
 model.add(keras.layers.MaxPooling2D(pool_size=(2,2),strides=(2,2)))
 # Block 4
 model.add(keras.layers.Conv2D(512,  kernel_size=(3,3), activation='relu',input_shape=(32,32,3),padding='same', kernel_regularizer=keras.regularizers.l2(weight_decay)))
 model.add(BatchNormalization())
-# model.add(keras.layers.Dropout(0.4))
 model.add(keras.layers.Conv2D(512,  kernel_size=(3,3), activation='relu',input_shape=(32,32,3),padding='same', kernel_regularizer=keras.regularizers.l2(weight_decay)))
 model.add(BatchNormalization())
-# model.add(keras.layers.Dropout(0.4))
 model.add(keras.layers.Conv2D(512,  kernel_size=(3,3), activation='relu',input_shape=(32,32,3),padding='same', kernel_regularizer=keras.regularizers.l2(weight_decay)))
 model.add(BatchNormalization())
 model.add(keras.layers.MaxPooling2D(pool_size=(2,2),strides=(2,2)))
 # Block 5
 model.add(keras.layers.Conv2D(512,  kernel_size=(3,3), activation='relu',input_shape=(32,32,3),padding='same', kernel_regularizer=keras.regularizers.l2(weight_decay)))
 model.add(BatchNormalization())
-# model.add(keras.layers.Dropout(0.4))
 model.add(keras.layers.Conv2D(512,  kernel_size=(3,3), activation='relu',input_shape=(32,32,3),padding='same', kernel_regularizer=keras.regularizers.l2(weight_decay)))
 model.add(BatchNormalization())
-# model.add(keras.layers.Dropout(0.4))
 model.add(keras.layers.Conv2D(512,  kernel_size=(3,3), activation='relu',input_shape=(32,32,3),padding='same', kernel_regularizer=keras.regularizers.l2(weight_decay)))
 model.add(BatchNormalization())
-# model.add(keras.layers.Dropout(0.5))
 model.add(keras.layers.MaxPooling2D(pool_size=(2,2),strides=(2,2)))
+#Fully Connected
 model.add(keras.layers.Flatten())
 model.add(keras.layers.Dense(512, activation='relu',kernel_regularizer=keras.regularizers.l2(weight_decay)))
 model.add(BatchNormalization())
+model.add(keras.layers.Dropout(0.5))
 model.add(keras.layers.Dense(512, activation='relu',kernel_regularizer=keras.regularizers.l2(weight_decay)))
 model.add(BatchNormalization())
 model.add(keras.layers.Dropout(0.5))
