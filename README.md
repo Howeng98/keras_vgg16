@@ -4,7 +4,7 @@
   <img src='img/img_01.png'>
 </p>
 
-Objective of this project is to classify the datasets which include some images like(ship,dog,cat,airplane,deer... e.g.)into **10** labes. And our model predict accuracy is **0.7719** in ``VGG16``， most of the researcher also got **0.66 ~ 0.78** accuracy with these datasets, so our model make sounds good! We use the ``Cifar10`` datatsets for practice is because it only contain 10 different types of images in data,so you can go for ```Cifar100``` for larger datasets and details.
+Objective of this project is to classify the datasets which include some images like(ship,dog,cat,airplane,deer... e.g.)into **10** labes. And our model predict accuracy is **0.8146** in ``VGG16``， most of the researcher also got **0.66 ~ 0.78** accuracy with these datasets, so our model make sounds good! We use the ``Cifar10`` datatsets for practice is because it only contain 10 different types of images in data,so you can go for ```Cifar100``` for larger datasets and details.
 
 We will use two kinds of different neural network strcuture which are ``Alexnet`` and ``VGG16``.But we will focus on the research and discuss on ``VGG16`` at here.
 
@@ -78,16 +78,18 @@ Or you can run the .ipynb file on notebook for tracking the output of each line.
 ## Output
 The following output image show the **Pediction of the Model** and the **Label** of each image.
 The title of each image refer to it's **Model Prediction**,and the xlabel refer to it's **Label Answer**.
-And it is briefly to observe that there only got almost **70% accuracy** of the prediction.
+And it is briefly to observe that there only got almost **80% accuracy** of the prediction.
 
 ![.](img/model_prediction.png)
 
 ## Model Accuracy and Loss Variation
-From the output we can observe that model **Loss** is getting decrease and **Accuracy** become greater and approach **0.7719**.
+From the output we can observe that model **Loss** is getting decrease and **Accuracy** become greater and approach **0.8146**.
 
 ![.](img/model_accuracy.png)
 
 ![.](img/model_loss.png)
+
+![.](img/epoch.png)
 
 ## Note
 I will take a note about what I had found about ***How the Parameters and Regularization affect your model accuracy and loss*** with this project as example. You also can check my commit history, I already mark down each change and how was the **Accuracy** affected.All the explanation will mentioned in a small word,I will make a clear **Technique Conclusion Note** later, and feel free to discuss with me!
