@@ -86,7 +86,7 @@ And it is briefly to observe that there only got almost **80% accuracy** of the 
 From the output we can observe that model **Loss** is getting decrease and **Accuracy** become greater and approach **0.8146**.
 
 <p align='center'>
-  <img src='img/model_accuracy.png>
+  <img src='img/model_accuracy.png'>            
 </p>
 
 
