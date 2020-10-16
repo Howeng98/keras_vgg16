@@ -85,11 +85,19 @@ And it is briefly to observe that there only got almost **80% accuracy** of the 
 ## Model Accuracy and Loss Variation
 From the output we can observe that model **Loss** is getting decrease and **Accuracy** become greater and approach **0.8146**.
 
-![.](img/model_accuracy.png)
+<p align='center'>
+  <img src='img/model_accuracy.png>
+</p>
 
-![.](img/model_loss.png)
 
-![.](img/epoch.png)
+<p align='center'>
+  <img src='img/model_loss.png'>
+</p>  
+
+
+<p align='center'>
+  <img src='img/epoch.png'>
+</p>
 
 ## Note
 I will take a note about what I had found about ***How the Parameters and Regularization affect your model accuracy and loss*** with this project as example. You also can check my commit history, I already mark down each change and how was the **Accuracy** affected.All the explanation will mentioned in a small word,I will make a clear **Technique Conclusion Note** later, and feel free to discuss with me!
@@ -105,6 +113,7 @@ I will take a note about what I had found about ***How the Parameters and Regula
   3. **Batch Normalization**
   
      This is the most important part that cause the accuracy reach 0.7X , if you didn't take this step, you won't get a high accuracy like this.You can use ``BatchNormalization`` after each ``Conv2D`` or ``Dense``.The function of ``Batch Normalization`` is can help you to fasten conrvergence, avoid overfitting, no need to use ``dropout`` anymore(it will help you to select the best dropout parameter value), allow to use a higher ``Learning Rate`` at first.
+     
      
      
 * https://www.itread01.com/content/1549021352.html
