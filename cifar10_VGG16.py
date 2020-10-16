@@ -41,7 +41,7 @@ y_test_label  = y_test
 # Normalization
 # mean = np.mean(x_train,axis=(0,1,2,3))
 # std = np.std(x_train, axis=(0, 1, 2, 3))
-# x_train = (x_train-mean)/(std+1e-7)
+# x_train = (x_train-mean)/(std+1e-7) 
 # x_test  = (x_test-mean)/(std+1e-7)
 
 
@@ -51,7 +51,7 @@ y_test = np_utils.to_categorical(y_test,10)
 # Variables
 batch_size = 32
 num_classes = 10
-epochs = 10
+epochs = 100
 weight_decay = 0.0005
 
 
@@ -102,7 +102,6 @@ model.add(keras.layers.Dense(512, activation='relu',kernel_regularizer=keras.reg
 model.add(BatchNormalization())
 model.add(keras.layers.Dropout(0.5))
 model.add(keras.layers.Dense(10, activation='softmax'))
-
 
 model.summary()
 plot_model(model, to_file='model.png')
