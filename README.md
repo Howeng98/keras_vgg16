@@ -102,11 +102,9 @@ I will take a note about what I had found about ***How the Parameters and Regula
      
   3. **Batch Normalization**
   
-     This is the most important part that cause the 
-
-
-## Reference
-* https://blog.csdn.net/JaysonRen/article/details/103273519
+     This is the most important part that cause the accuracy reach 0.7X , if you didn't take this step, you won't get a high accuracy like this.You can use ``BatchNormalization`` after each ``Conv2D`` or ``Dense``.The function of ``Batch Normalization`` is can help you to fasten conrvergence, avoid overfitting, no need to use ``dropout`` anymore(it will help you to select the best dropout parameter value), allow to use a higher ``Learning Rate`` at first.
+     
+     
 * https://www.itread01.com/content/1549021352.html
 * https://github.com/BIGBALLON/cifar-10-cnn
 * https://blog.csdn.net/bryant_meng/article/details/81626016
